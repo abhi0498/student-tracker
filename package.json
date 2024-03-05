@@ -11,14 +11,21 @@
   },
   "dependencies": {
     "@emotion/cache": "latest",
-    "@emotion/react": "latest",
-    "@emotion/styled": "latest",
-    "@mui/icons-material": "latest",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.12",
+    "@mui/icons-material": "^5.15.12",
     "@mui/material": "latest",
+    "@mui/material-next": "^6.0.0-alpha.124",
     "@mui/material-nextjs": "latest",
+    "@supabase/auth-helpers-nextjs": "^0.9.0",
+    "@supabase/ssr": "^0.1.0",
+    "@supabase/supabase-js": "^2.39.7",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "use-debounce": "^10.0.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
   },
   "devDependencies": {
     "@types/node": "latest",
