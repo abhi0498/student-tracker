@@ -11,7 +11,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 import React from "react";
+import toast from "react-hot-toast";
 import * as XLSX from "xlsx";
 
 const keysinTable = [
@@ -43,6 +45,7 @@ const Upload = () => {
   const [fieldColumnMapping, setFieldColumnMapping] = React.useState<
     Record<string, string>
   >({});
+  const router = useRouter();
 
   console.log({ fieldColumnMapping });
 
@@ -71,7 +74,21 @@ const Upload = () => {
 
             setUploadedData(raw_data);
             setUploadedKeys(uploadedKeys);
+
+            //set default feild mapping
+            const defaultFieldMapping: Record<string, string> = {};
+            keysinTable.forEach((key) => {
+              const value = uploadedKeys.find((k) =>
+                k.toLowerCase().includes(key.key.toLowerCase())
+              );
+              if (value) {
+                defaultFieldMapping[key.key] = value;
+              }
+            });
+
+            setFieldColumnMapping(defaultFieldMapping);
             console.log(raw_data);
+            toast.success("File imported successfully");
           }
         }}
         type="file"
@@ -145,7 +162,7 @@ const Upload = () => {
           console.log("Submit");
           //all keys should be present
           if (Object.keys(fieldColumnMapping).length !== keysinTable.length) {
-            alert("All keys should be present");
+            toast.error("All fields are not mapped");
             return;
           }
 
@@ -159,12 +176,13 @@ const Upload = () => {
             data.push(obj);
           }
 
-          console.log(data);
           supabase
             .from("student")
             .insert([...(data as any[])])
             .then((res) => {
               console.log(res);
+              toast.success("Data uploaded successfully");
+              router.push("/");
             });
         }}
       >

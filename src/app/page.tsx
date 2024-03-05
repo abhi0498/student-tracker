@@ -1,7 +1,7 @@
 "use client";
 import UploadButton from "@/components/UploadButton";
 import { supabase } from "@/utils/supabase/client";
-import { Mail, Phone } from "@mui/icons-material";
+import { Delete, Mail, Phone } from "@mui/icons-material";
 import {
   Card,
   CardContent,
@@ -13,32 +13,51 @@ import {
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/system";
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDebounce } from "use-debounce";
 
 export default function Home() {
   const matches = useMediaQuery("(min-width:600px)");
 
-  const [students, setStudents] = React.useState<any[]>([]);
-  const [searchText, setSearchText] = React.useState<string>("");
+  const [students, setStudents] = useState<any[]>([]);
+  const [searchText, setSearchText] = useState<string>("");
   const [search] = useDebounce(searchText, 1500);
 
-  React.useEffect(() => {
-    // fetch students
-    (async () => {
-      const user = (await supabase.auth.getUser()).data.user;
-      if (!user) return console.error("User not found");
+  const fetchData = useCallback(async () => {
+    const user = (await supabase.auth.getUser()).data.user;
+    if (!user) return toast.error("User not found");
 
-      const { data, error } = await supabase
-        .from("student")
-        .select("*")
-        .eq("created_by", user.id)
-        .ilike("name", `%${searchText}%`);
+    const { data, error } = await supabase
+      .from("student")
+      .select("*")
+      .eq("created_by", user.id)
+      .ilike("name", `%${searchText}%`);
 
-      if (error) return console.error(error);
-      if (data) setStudents(data);
-    })();
+    if (error) return toast.error(error.message);
+    if (data) setStudents(data);
   }, [search]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const deleteStudent = useCallback(
+    async (studentId: string) => {
+      const { error } = await supabase
+        .from("student")
+        .delete()
+        .eq("id", studentId);
+
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Student deleted");
+        fetchData();
+      }
+    },
+    [fetchData]
+  );
 
   return (
     <div style={{ margin: "2vw" }}>
@@ -52,7 +71,6 @@ export default function Home() {
           placeholder="Search by name"
           sx={{ mb: 3, width: matches ? "30vw" : "100%", ml: "auto" }}
           value={searchText}
-          //debounce search
           onChange={(e) => setSearchText(e.target.value)}
         />
       </Stack>
@@ -66,7 +84,20 @@ export default function Home() {
         {students.map((student) => (
           <Grid item xs={12} sm={6} md={4} key={student.id}>
             <Card>
-              <CardHeader title={student.name} />
+              <CardHeader
+                title={student.name}
+                action={
+                  <Stack
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    <IconButton onClick={() => deleteStudent(student.id)}>
+                      <Delete color="error" />
+                    </IconButton>
+                  </Stack>
+                }
+              />
               <CardContent>
                 <Stack direction={"row"} spacing={2}>
                   <Stack direction={"column"} flex={1}>
