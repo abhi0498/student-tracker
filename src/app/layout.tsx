@@ -10,6 +10,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Metadata, Viewport } from "next";
 import * as React from "react";
 import { Toaster } from "react-hot-toast";
+import { ConfirmProvider } from "material-ui-confirm";
+import AppWrapper from "@/components/AppWrapper";
 
 export const metadata: Metadata = {
   title: "Student Tracker",
@@ -46,10 +48,12 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         />
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            {props.children}
-            <BottomTabs />
+            <AppWrapper>
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              <CssBaseline />
+              {props.children}
+              <BottomTabs />
+            </AppWrapper>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

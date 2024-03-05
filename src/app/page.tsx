@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/system";
+import { useConfirm } from "material-ui-confirm";
 import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "use-debounce";
@@ -23,6 +24,7 @@ export default function Home() {
   const [students, setStudents] = useState<any[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [search] = useDebounce(searchText, 1500);
+  const confirm = useConfirm();
 
   const fetchData = useCallback(async () => {
     const user = (await supabase.auth.getUser()).data.user;
@@ -92,7 +94,19 @@ export default function Home() {
                     alignItems={"center"}
                     justifyContent={"center"}
                   >
-                    <IconButton onClick={() => deleteStudent(student.id)}>
+                    <IconButton
+                      onClick={() => {
+                        //deleteStudent(student.id);
+                        confirm({
+                          description: "Are you sure you want to delete?",
+                          title: "Warning!",
+                        })
+                          .then(() => {
+                            deleteStudent(student.id);
+                          })
+                          .catch(() => {});
+                      }}
+                    >
                       <Delete color="error" />
                     </IconButton>
                   </Stack>
