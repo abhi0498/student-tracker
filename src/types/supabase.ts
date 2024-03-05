@@ -1,72 +1,70 @@
-Need to install the following packages:
-supabase@1.148.6
-Ok to proceed? (y) export type Json =
+export type Json =
   | string
   | number
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[]
+  | Json[];
 
 export type Database = {
   public: {
     Tables: {
       student: {
         Row: {
-          age: string | null
-          batch: string
-          created_at: string
-          created_by: string
-          email: string | null
-          id: number
-          name: string
-          phone: string | null
-        }
+          age: string | null;
+          batch: string;
+          created_at: string;
+          created_by: string;
+          email: string | null;
+          id: number;
+          name: string;
+          phone: string | null;
+        };
         Insert: {
-          age?: string | null
-          batch: string
-          created_at?: string
-          created_by?: string
-          email?: string | null
-          id?: number
-          name: string
-          phone?: string | null
-        }
+          age?: string | null;
+          batch: string;
+          created_at?: string;
+          created_by?: string;
+          email?: string | null;
+          id?: number;
+          name: string;
+          phone?: string | null;
+        };
         Update: {
-          age?: string | null
-          batch?: string
-          created_at?: string
-          created_by?: string
-          email?: string | null
-          id?: number
-          name?: string
-          phone?: string | null
-        }
+          age?: string | null;
+          batch?: string;
+          created_at?: string;
+          created_by?: string;
+          email?: string | null;
+          id?: number;
+          name?: string;
+          phone?: string | null;
+        };
         Relationships: [
           {
-            foreignKeyName: "public_student_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            foreignKeyName: "public_student_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           }
-        ]
-      }
-    }
+        ];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Enums: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
 export type Tables<
   PublicTableNameOrOptions extends
@@ -79,7 +77,7 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
@@ -87,11 +85,11 @@ export type Tables<
       Database["public"]["Views"])
   ? (Database["public"]["Tables"] &
       Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
+      Row: infer R;
     }
     ? R
     : never
-  : never
+  : never;
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -102,17 +100,17 @@ export type TablesInsert<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
+      Insert: infer I;
     }
     ? I
     : never
-  : never
+  : never;
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -123,17 +121,17 @@ export type TablesUpdate<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
+      Update: infer U;
     }
     ? U
     : never
-  : never
+  : never;
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -146,4 +144,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
   ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never
+  : never;
