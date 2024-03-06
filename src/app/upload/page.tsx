@@ -102,6 +102,30 @@ const Upload = () => {
         sx={{ mb: 3, width: "100%", ml: "auto" }}
       />
 
+      <Stack justifyContent={"end"}>
+        <Button
+          sx={{ ml: "auto" }}
+          onClick={() => {
+            //create a template
+            const ws = XLSX.utils.json_to_sheet([
+              {
+                Name: "",
+                Batch: "",
+                Age: "",
+                Email: "",
+                Phone: "",
+              },
+            ]);
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+            XLSX.writeFile(wb, "student_data_template.xlsx");
+          }}
+        >
+          Download Template
+        </Button>
+      </Stack>
+
       {uploadedKeys.length !== 0 && (
         <>
           <Typography variant="h6" component="h1" sx={{ mb: 3 }}>
