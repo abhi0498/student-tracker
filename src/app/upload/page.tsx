@@ -88,7 +88,7 @@ const Upload = () => {
               }
             });
 
-            // setFieldColumnMapping(defaultFieldMapping);
+            setFieldColumnMapping(defaultFieldMapping);
             console.log(raw_data);
             toast.success("File imported successfully");
           }
