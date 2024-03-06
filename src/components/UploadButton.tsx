@@ -19,7 +19,7 @@ const UploadButton = () => {
       name: "Upload",
       onClick: () => router.push("/upload"),
     },
-    { icon: <Add />, name: "Add" },
+    { icon: <Add />, name: "Add", onClick: () => router.push("/student/new") },
   ];
 
   const [open, setOpen] = React.useState(false);

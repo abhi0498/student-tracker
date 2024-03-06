@@ -1,19 +1,24 @@
 "use client";
 import UploadButton from "@/components/UploadButton";
 import { supabase } from "@/utils/supabase/client";
-import { Delete, Mail, Phone } from "@mui/icons-material";
+import { Delete, Edit, Mail, Phone, Sort } from "@mui/icons-material";
 import {
   Card,
   CardContent,
   CardHeader,
   Grid,
   IconButton,
+  List,
+  Modal,
+  Select,
+  Skeleton,
   TextField,
   useMediaQuery,
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Stack } from "@mui/system";
 import { useConfirm } from "material-ui-confirm";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "use-debounce";
@@ -24,9 +29,11 @@ export default function Home() {
   const [students, setStudents] = useState<any[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [search] = useDebounce(searchText, 1500);
-  const confirm = useConfirm();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const fetchData = useCallback(async () => {
+    setLoading(true);
     const user = (await supabase.auth.getUser()).data.user;
     if (!user) return toast.error("User not found");
 
@@ -37,129 +44,133 @@ export default function Home() {
       .ilike("name", `%${searchText}%`)
       .order("created_at", { ascending: false });
 
-    if (error) return toast.error(error.message);
+    if (error) {
+      setLoading(false);
+      return toast.error(error.message);
+    }
     if (data) setStudents(data);
+    setLoading(false);
   }, [search]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  const deleteStudent = useCallback(
-    async (studentId: string) => {
-      const { error } = await supabase
-        .from("student")
-        .delete()
-        .eq("id", studentId);
-
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success("Student deleted");
-        fetchData();
-      }
-    },
-    [fetchData]
-  );
-
   return (
     <div style={{ margin: "2vw" }}>
       <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
         Students 🧑‍🎓
       </Typography>
-      <Stack justifyContent={"end"}>
+      <Stack
+        justifyContent={"end"}
+        direction={"row"}
+        alignItems={"center"}
+        sx={{ mb: 3 }}
+      >
         <TextField
           id="outlined-required"
           label="Search"
           placeholder="Search by name"
-          sx={{ mb: 3, width: matches ? "30vw" : "100%", ml: "auto" }}
+          sx={{ width: matches ? "30vw" : "100%", ml: "auto" }}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
       </Stack>
-      <Grid
-        container
-        spacing={3}
-        pb={10}
-        sx={{ overflowY: "scroll", maxHeight: "80vh" }}
-        alignItems={"center"}
-      >
-        {students.map((student) => (
-          <Grid item xs={12} sm={6} md={4} key={student.id}>
-            <Card>
-              <CardHeader
-                title={student.name}
-                action={
-                  <Stack
-                    direction={"row"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                  >
-                    <IconButton
-                      onClick={() => {
-                        //deleteStudent(student.id);
-                        confirm({
-                          description: "Are you sure you want to delete?",
-                          title: "Warning!",
-                        })
-                          .then(() => {
-                            deleteStudent(student.id);
-                          })
-                          .catch(() => {});
-                      }}
-                    >
-                      <Delete color="error" />
-                    </IconButton>
-                  </Stack>
-                }
-              />
-              <CardContent>
-                <Stack direction={"row"} spacing={2}>
-                  <Stack direction={"column"} flex={1}>
-                    <Typography variant="body1">
-                      Class/Batch: {student.batch || " - "}
-                    </Typography>
-                    <Typography variant="body1">
-                      Age: {student.age || " - "}
-                    </Typography>
-                  </Stack>
 
-                  <Stack
-                    direction={"row"}
-                    alignItems={"end"}
-                    justifyContent={"end"}
-                  >
-                    <IconButton
-                      aria-label="Mail"
-                      onClick={() => {
-                        if (!student.email) {
-                          return toast.error("No email found for this student");
-                        }
-                        const a = document.createElement("a");
-                        a.href = `mailto:${student.email}`;
-                        a.click();
-                      }}
+      {loading ? (
+        <Grid
+          container
+          spacing={3}
+          pb={10}
+          px={1}
+          sx={{ overflowY: "scroll", maxHeight: "80vh" }}
+          alignItems={"center"}
+        >
+          {Array.from({ length: 10 }).map((_, i) => (
+            <Grid item xs={12} sm={6} md={4} key={i}>
+              <Skeleton variant="rectangular" width={"100%"} height={200} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Grid
+          container
+          spacing={3}
+          pb={10}
+          px={1}
+          sx={{ overflowY: "scroll", maxHeight: "80vh" }}
+          alignItems={"center"}
+        >
+          {students.map((student) => (
+            <Grid item xs={12} sm={6} md={4} key={student.id}>
+              <Card>
+                <CardHeader
+                  title={student.name}
+                  action={
+                    <Stack
+                      direction={"row"}
+                      alignItems={"center"}
+                      justifyContent={"center"}
                     >
-                      <Mail />
-                    </IconButton>
-                    <IconButton
-                      aria-label="Call"
-                      onClick={() => {
-                        const a = document.createElement("a");
-                        a.href = `tel:${student.phone}`;
-                        a.click();
-                      }}
-                    >
-                      <Phone />
-                    </IconButton>
-                  </Stack>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                      <IconButton
+                        onClick={() => {
+                          router.push(`/student/${student.id}`);
+                        }}
+                      >
+                        <Edit />
+                      </IconButton>
+                    </Stack>
+                  }
+                />
+                <CardContent>
+                  <Stack direction={"row"} spacing={2}>
+                    <Stack direction={"column"} flex={1}>
+                      <Typography variant="body1">
+                        Class/Batch: {student.batch || " - "}
+                      </Typography>
+                      <Typography variant="body1">
+                        Age: {student.age || " - "}
+                      </Typography>
+                    </Stack>
 
+                    <Stack
+                      direction={"row"}
+                      alignItems={"end"}
+                      justifyContent={"end"}
+                    >
+                      <IconButton
+                        aria-label="Mail"
+                        onClick={() => {
+                          if (!student.email) {
+                            return toast.error(
+                              "No email found for this student"
+                            );
+                          }
+                          const a = document.createElement("a");
+                          a.href = `mailto:${student.email}`;
+                          a.click();
+                        }}
+                      >
+                        <Mail />
+                      </IconButton>
+                      <IconButton
+                        aria-label="Call"
+                        onClick={() => {
+                          const a = document.createElement("a");
+                          a.href = `tel:${student.phone}`;
+                          a.click();
+                        }}
+                      >
+                        <Phone />
+                      </IconButton>
+                    </Stack>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
       <UploadButton />
     </div>
   );
