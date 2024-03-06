@@ -10,7 +10,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(function () {
       OneSignal.init({
-        appId: "b40b7cc7-13dc-4662-8b48-efa668f9b72a",
+        appId: "ac3e837e-8f13-4eec-baa0-d08188667414",
         notifyButton: {
           enable: true,
         },
