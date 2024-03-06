@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"; // defaults to auto
+
 const OneSignalSdk = require("@onesignal/node-onesignal");
 
 const app_key_provider = {
