@@ -18,7 +18,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const isMobile = useMediaQuery("(max-width:600px)");
   return (
-    <main style={{ padding: "2vw" }}>
+    <main
+      style={{
+        padding: "2vw",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
       <Container maxWidth="sm">
         <Typography
           variant="h3"
