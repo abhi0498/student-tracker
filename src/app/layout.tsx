@@ -12,6 +12,7 @@ import * as React from "react";
 import { Toaster } from "react-hot-toast";
 import { ConfirmProvider } from "material-ui-confirm";
 import AppWrapper from "@/components/AppWrapper";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Student Tracker",
@@ -39,6 +40,12 @@ export const viewport: Viewport = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <Head>
+        <script
+          src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+          defer
+        ></script>
+      </Head>
       <body>
         <Toaster
           position="top-right"
