@@ -9,7 +9,7 @@ const nextConfig = {
     domains: ["daisyui.com"], // Allow images from example.com
   },
   typescript: {
-    ignoreBuildErrors: true, // Ignore TypeScript build errors
+    // ignoreBuildErrors: true, // Ignore TypeScript build errors
   },
 };
 
