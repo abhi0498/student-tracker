@@ -34,7 +34,8 @@ export default function Home() {
       .from("student")
       .select("*")
       .eq("created_by", user.id)
-      .ilike("name", `%${searchText}%`);
+      .ilike("name", `%${searchText}%`)
+      .order("created_at", { ascending: false });
 
     if (error) return toast.error(error.message);
     if (data) setStudents(data);
@@ -116,9 +117,11 @@ export default function Home() {
                 <Stack direction={"row"} spacing={2}>
                   <Stack direction={"column"} flex={1}>
                     <Typography variant="body1">
-                      Class/Batch: {student.batch}
+                      Class/Batch: {student.batch || " - "}
                     </Typography>
-                    <Typography variant="body1">Age: {student.age}</Typography>
+                    <Typography variant="body1">
+                      Age: {student.age || " - "}
+                    </Typography>
                   </Stack>
 
                   <Stack
@@ -129,6 +132,9 @@ export default function Home() {
                     <IconButton
                       aria-label="Mail"
                       onClick={() => {
+                        if (!student.email) {
+                          return toast.error("No email found for this student");
+                        }
                         const a = document.createElement("a");
                         a.href = `mailto:${student.email}`;
                         a.click();

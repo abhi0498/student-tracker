@@ -20,6 +20,7 @@ const keysinTable = [
   {
     label: "Name",
     key: "name",
+    required: true,
   },
   {
     label: "Batch",
@@ -36,6 +37,7 @@ const keysinTable = [
   {
     label: "Phone",
     key: "phone",
+    required: true,
   },
 ];
 
@@ -86,7 +88,7 @@ const Upload = () => {
               }
             });
 
-            setFieldColumnMapping(defaultFieldMapping);
+            // setFieldColumnMapping(defaultFieldMapping);
             console.log(raw_data);
             toast.success("File imported successfully");
           }
@@ -116,7 +118,7 @@ const Upload = () => {
               keysinTable.map((key) => (
                 <Grid item xs={12} sm={6} md={4}>
                   <Typography variant="body1" flex={1} mb={1}>
-                    {key.label}
+                    {key.label} {key.required ? "*" : ""}
                   </Typography>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
@@ -164,10 +166,12 @@ const Upload = () => {
         color="primary"
         onClick={() => {
           console.log("Submit");
-          //all keys should be present
-          if (Object.keys(fieldColumnMapping).length !== keysinTable.length) {
-            toast.error("All fields are not mapped");
-            return;
+          //all require keys should be present
+          for (const key of keysinTable) {
+            if (key.required && !fieldColumnMapping[key.key]) {
+              toast.error(`Please map the ${key.label} column`);
+              return;
+            }
           }
 
           //form array of objects
@@ -185,8 +189,13 @@ const Upload = () => {
             .insert([...(data as any[])])
             .then((res) => {
               console.log(res);
-              toast.success("Data uploaded successfully");
-              router.push("/");
+              if (res.error) {
+                toast.error(res.error.message);
+                return;
+              } else {
+                toast.success("Data uploaded successfully");
+                router.push("/");
+              }
             });
         }}
       >
