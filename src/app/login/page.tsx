@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -62,8 +63,8 @@ export default function LoginPage() {
                     });
                   if (error) {
                     console.error(error);
-                  }
-                  if (data) {
+                    toast.error(error.message);
+                  } else {
                     router.push("/");
                   }
                 } catch (error) {
@@ -90,6 +91,8 @@ export default function LoginPage() {
                 });
 
                 if (error) {
+                  console.error(error);
+                  toast.error(error.message);
                 } else {
                   router.push("/profile");
                 }
