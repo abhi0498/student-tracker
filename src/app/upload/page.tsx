@@ -106,7 +106,11 @@ const Upload = () => {
             Choose the columns in excel which corresponds to the following:
           </Typography>
 
-          <Grid container spacing={3} sx={{ overflowY: "scroll" }}>
+          <Grid
+            container
+            spacing={3}
+            sx={{ overflowY: "scroll", maxHeight: "60vh" }}
+          >
             {
               //show the keys in the table
               keysinTable.map((key) => (

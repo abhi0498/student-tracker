@@ -27,6 +27,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-hot-toast": "^2.4.1",
+    "react-joyride": "^2.7.4",
     "use-debounce": "^10.0.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
   },
