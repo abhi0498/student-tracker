@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { useConfirm } from "material-ui-confirm";
+import RHTextField from "@/components/form/RHTextField";
 
 const studentSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -31,36 +32,6 @@ const studentSchema = yup.object().shape({
   email: yup.string().email("Invalid email"),
   phone: yup.string().required("Phone is required"),
 });
-
-const RHTextField = ({
-  name,
-  label,
-  ...rest
-}: {
-  name: string;
-  label: string;
-  [x: string]: any;
-}) => {
-  const { register, formState } = useFormContext();
-  const { errors } = formState;
-
-  return (
-    <>
-      <TextField
-        {...rest}
-        {...register(name)}
-        label={label}
-        error={!!errors[name]}
-        autoComplete="off"
-      />
-      {
-        <Typography variant="caption" color="error">
-          {errors[name]?.message?.toString()}
-        </Typography>
-      }
-    </>
-  );
-};
 
 const Student = ({ params }: { params: { id: string } }) => {
   const router = useRouter();

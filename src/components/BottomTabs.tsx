@@ -1,5 +1,10 @@
 "use client";
-import { AccountCircle, Assessment, Group } from "@mui/icons-material";
+import {
+  AccountCircle,
+  Assessment,
+  Assignment,
+  Group,
+} from "@mui/icons-material";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -16,6 +21,11 @@ const BottomTabs = () => {
       path: "/",
     },
     {
+      label: "Tasks",
+      icon: <Assignment />,
+      path: "/reports",
+    },
+    {
       label: "Reports",
       icon: <Assessment />,
       path: "/reports",
@@ -26,6 +36,7 @@ const BottomTabs = () => {
       path: "/profile",
     },
   ];
+
   console.log(currentPath);
   useEffect(() => {
     if (currentPath === "/") setValue(0);

@@ -8,13 +8,12 @@ import React, { useEffect } from "react";
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(function () {
+    OneSignalDeferred.push(function (OneSignal) {
       OneSignal.init({
-        appId: "ac3e837e-8f13-4eec-baa0-d08188667414",
+        appId: "f567c986-15be-4591-93f8-1054dcd29fcd",
         notifyButton: {
           enable: true,
         },
-
         allowLocalhostAsSecureOrigin: true,
       });
     });

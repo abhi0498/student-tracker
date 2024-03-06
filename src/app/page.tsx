@@ -1,7 +1,15 @@
 "use client";
 import UploadButton from "@/components/UploadButton";
 import { supabase } from "@/utils/supabase/client";
-import { Delete, Edit, Mail, Phone, Sort } from "@mui/icons-material";
+import {
+  Assessment,
+  Assignment,
+  Delete,
+  Edit,
+  Mail,
+  Phone,
+  Sort,
+} from "@mui/icons-material";
 import {
   Card,
   CardContent,
@@ -110,8 +118,16 @@ export default function Home() {
                     <Stack
                       direction={"row"}
                       alignItems={"center"}
-                      justifyContent={"center"}
+                      justifyContent={"end"}
+                      pr={1}
                     >
+                      <IconButton
+                        onClick={() => {
+                          router.push(`/student/${student.id}/tasks`);
+                        }}
+                      >
+                        <Assignment />
+                      </IconButton>
                       <IconButton
                         onClick={() => {
                           router.push(`/student/${student.id}`);
