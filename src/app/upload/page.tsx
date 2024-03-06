@@ -53,7 +53,7 @@ const Upload = () => {
 
   return (
     <div style={{ margin: "2vw" }}>
-      <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
         Upload Student Data 📂
       </Typography>
       <TextField
@@ -99,10 +99,10 @@ const Upload = () => {
             ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
         }}
         variant="outlined"
-        sx={{ mb: 3, width: "100%", ml: "auto" }}
+        sx={{ width: "100%", ml: "auto" }}
       />
 
-      <Stack justifyContent={"end"}>
+      <Stack justifyContent={"end"} sx={{ mb: 3 }}>
         <Button
           sx={{ ml: "auto" }}
           onClick={() => {
@@ -129,13 +129,18 @@ const Upload = () => {
       {uploadedKeys.length !== 0 && (
         <>
           <Typography variant="h6" component="h1" sx={{ mb: 3 }}>
-            Choose the columns in excel which corresponds to the following:
+            Choose the columns from your excel which corresponds to the
+            following fields:
           </Typography>
 
           <Grid
             container
             spacing={3}
-            sx={{ overflowY: "scroll", maxHeight: "60vh" }}
+            sx={{
+              overflowY: "scroll",
+              maxHeight: "65vh",
+              paddingBottom: "10vh",
+            }}
           >
             {
               //show the keys in the table
