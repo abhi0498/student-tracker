@@ -10,7 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useCallback, useEffect } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import {
+  FormProvider,
+  useForm,
+  useFormContext,
+  useWatch,
+} from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { supabase } from "@/utils/supabase/client";
@@ -38,6 +43,7 @@ const RHTextField = ({
 }) => {
   const { register, formState, getValues } = useFormContext();
   const { errors } = formState;
+  const value = useWatch({ name });
 
   return (
     <>
@@ -47,7 +53,7 @@ const RHTextField = ({
         label={label}
         error={!!errors[name]}
         autoComplete="off"
-        InputLabelProps={{ shrink: getValues(name) ? true : false }}
+        InputLabelProps={{ shrink: value ? true : false }}
       />
       {
         <Typography variant="caption" color="error">
