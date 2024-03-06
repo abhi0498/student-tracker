@@ -41,9 +41,8 @@ const RHTextField = ({
   label: string;
   [x: string]: any;
 }) => {
-  const { register, formState, getValues } = useFormContext();
+  const { register, formState } = useFormContext();
   const { errors } = formState;
-  const value = useWatch({ name });
 
   return (
     <>
@@ -53,7 +52,6 @@ const RHTextField = ({
         label={label}
         error={!!errors[name]}
         autoComplete="off"
-        InputLabelProps={{ shrink: value ? true : false }}
       />
       {
         <Typography variant="caption" color="error">
