@@ -1,12 +1,14 @@
 //@ts-nocheck
 "use client";
 import { ConfirmProvider } from "material-ui-confirm";
+import Head from "next/head";
+import Script from "next/script";
 import React, { useEffect } from "react";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
-    window.OneSignal = window.OneSignal || [];
-    OneSignal.push(function () {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(function () {
       OneSignal.init({
         appId: "b40b7cc7-13dc-4662-8b48-efa668f9b72a",
         notifyButton: {
@@ -18,7 +20,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => {
-      window.OneSignal = undefined;
+      window.OneSignalDeferred = undefined;
     };
   }, []);
   return <ConfirmProvider>{children}</ConfirmProvider>;

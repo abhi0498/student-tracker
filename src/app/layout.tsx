@@ -13,6 +13,7 @@ import { Toaster } from "react-hot-toast";
 import { ConfirmProvider } from "material-ui-confirm";
 import AppWrapper from "@/components/AppWrapper";
 import Head from "next/head";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Student Tracker",
@@ -40,12 +41,7 @@ export const viewport: Viewport = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <Head>
-        <script
-          src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
-          defer
-        ></script>
-      </Head>
+      <Script src="/OneSignalSDKWorker.js" defer></Script>
       <body>
         <Toaster
           position="top-right"
