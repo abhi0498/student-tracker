@@ -41,7 +41,10 @@ export const viewport: Viewport = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      {/* <Script src="/OneSignalSDKWorker.js" defer></Script> */}
+      <Script
+        src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+        defer
+      ></Script>
       <body>
         <Toaster
           position="top-right"
