@@ -18,6 +18,7 @@ import TaskCard from "../student/[id]/tasks/TaskCard";
 import { Add } from "@mui/icons-material";
 import StudentDialog from "./StudentDialog";
 import { useDebounce } from "use-debounce";
+import NoData from "@/components/NoData";
 
 const Tasks = () => {
   const [tab, setTab] = useState("pending");
@@ -89,6 +90,8 @@ const Tasks = () => {
             </Grid>
           ))}
         </Grid>
+      ) : tasks?.length === 0 ? (
+        <NoData height={"55vh"} />
       ) : (
         <Grid
           container

@@ -1,4 +1,5 @@
 "use client";
+import NoData from "@/components/NoData";
 import UploadButton from "@/components/UploadButton";
 import { supabase } from "@/utils/supabase/client";
 import {
@@ -99,6 +100,8 @@ export default function Home() {
             </Grid>
           ))}
         </Grid>
+      ) : students.length === 0 ? (
+        <NoData height={"65vh"} />
       ) : (
         <Grid
           container
