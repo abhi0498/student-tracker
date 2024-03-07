@@ -23,6 +23,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
       if (session?.user?.id) {
         OneSignalDeferred.push(function () {
           OneSignal.login(session.user.id);
+          OneSignal.User.addAlias("external_user_id", session.user.id);
         });
       }
     });

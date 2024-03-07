@@ -27,6 +27,7 @@ export async function GET(request: Request) {
   notification.contents = {
     en: "Hello OneSignal!",
   };
+  notification.included_segments = ["Active Users"];
   const { id } = await client.createNotification(notification);
 
   return new Response(JSON.stringify({ id }));
