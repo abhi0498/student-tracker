@@ -54,10 +54,13 @@ const Task = ({ params }: { params: { id: string; task_id: string } }) => {
     if (params.task_id !== "new") {
       getTaskById(params.task_id)
         .then((data) => {
+          if (!data) return;
           formMethods.reset({
             ...data,
-            status: statuses.find((status) => status.value === data.status),
-          });
+            status:
+              statuses.find((status) => status.value === data.status) ||
+              statuses[0],
+          } as any);
         })
         .catch((error) => {
           toast.error(error.message);
