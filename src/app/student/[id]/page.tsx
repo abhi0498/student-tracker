@@ -89,7 +89,7 @@ const Student = ({ params }: { params: { id: string } }) => {
     }
   };
   return (
-    <div style={{ margin: "2vw" }}>
+    <div style={{ margin: "1.5rem" }}>
       <Stack
         spacing={2}
         direction="row"

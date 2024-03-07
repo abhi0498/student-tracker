@@ -27,7 +27,10 @@ export async function GET(request: Request) {
   notification.contents = {
     en: "Hello OneSignal!",
   };
-  notification.included_segments = ["Active Users"];
+  // notification.include_aliases = {
+  //   external_id: ["4eae2f69-d27e-4927-9eb1-7f28d5882849"],
+  // };
+  notification.target_channel = "push";
   const { id } = await client.createNotification(notification);
 
   return new Response(JSON.stringify({ id }));

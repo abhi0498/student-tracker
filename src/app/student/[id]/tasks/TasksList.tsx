@@ -1,13 +1,11 @@
 "use client";
 
-import { statuses } from "@/api/enums";
 import { fetchStudentById } from "@/api/student";
 import { deleteTask } from "@/api/task";
 import { supabase } from "@/utils/supabase/client";
-import { Add, ArrowBack, Delete } from "@mui/icons-material";
+import { Add, ArrowBack, Mail, Phone } from "@mui/icons-material";
 import {
   Card,
-  CardContent,
   CardHeader,
   Fab,
   Grid,
@@ -19,6 +17,7 @@ import { useConfirm } from "material-ui-confirm";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import TaskCard from "./TaskCard";
 
 const TasksList = ({ id }: { id: string }) => {
   const [tasks, setTasks] = useState<any[]>([]);
@@ -37,38 +36,18 @@ const TasksList = ({ id }: { id: string }) => {
     }
   }, [id]);
 
+  const fetchTasks = async () => {
+    const { data, error } = await supabase
+      .from("tasks")
+      .select("*")
+      .eq("student_id", id)
+      .order("created_at", { ascending: false });
+    if (error) console.error("Error fetching tasks", error);
+    if (data) setTasks(data);
+  };
   useEffect(() => {
-    const fetchTasks = async () => {
-      const { data, error } = await supabase
-        .from("tasks")
-        .select("*")
-        .eq("student_id", id);
-      if (error) console.error("Error fetching tasks", error);
-      if (data) setTasks(data);
-    };
     fetchTasks();
   }, [id]);
-
-  const onDelete = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    task: any
-  ): void => {
-    e.stopPropagation();
-    confirm({
-      title: "Delete Task",
-      description: "Are you sure you want to delete?",
-    }).then(() => {
-      deleteTask(task.id)
-        .then(() => {
-          toast.success("Task deleted");
-          const newTasks = tasks.filter((t) => t.id !== task.id);
-          setTasks(newTasks);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-    });
-  };
 
   return (
     <>
@@ -78,17 +57,62 @@ const TasksList = ({ id }: { id: string }) => {
         </IconButton>
         <Typography variant="h4">Tasks</Typography>
       </Stack>
-      <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
-        Name: {student.name}
-        <br />
-        {student.batch ? <>Batch/Class: {student.batch}</> : null}
-      </Typography>
+      <Card>
+        <CardHeader
+          title={
+            <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
+              Student Name: <br />
+              {student.name}
+              <br />
+              {student.batch ? <>Batch/Class: {student.batch}</> : null}
+            </Typography>
+          }
+          action={
+            <Stack direction={"row"} spacing={1}>
+              <IconButton
+                aria-label="mail"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!student.email) {
+                    return toast.error("No email found for this student");
+                  }
+                  const a = document.createElement("a");
+                  a.href = `mailto:${student.email}`;
+                  a.click();
+                }}
+              >
+                <Mail />
+              </IconButton>
+              <IconButton
+                aria-label="call"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (!student.phone) {
+                    return toast.error("No phone found for this student");
+                  }
+                  const a = document.createElement("a");
+                  a.href = `tel:${student.phone}`;
+                  a.click();
+                }}
+              >
+                <Phone />
+              </IconButton>
+            </Stack>
+          }
+        />
+      </Card>
 
+      <Typography variant="h5" my={2}>
+        Tasks List
+      </Typography>
       <Grid
         container
         spacing={2}
+        my={2}
         style={{
-          maxHeight: "70vh",
+          maxHeight: "60vh",
+          overflowY: "scroll",
+          paddingBottom: "10vh",
         }}
       >
         {tasks.map((task) => (
@@ -101,30 +125,7 @@ const TasksList = ({ id }: { id: string }) => {
               router.push(`/student/${id}/tasks/${task.id}`);
             }}
           >
-            <Card>
-              <CardHeader
-                title={task.title}
-                action={
-                  <>
-                    <IconButton
-                      onClick={(e) => onDelete(e, task)}
-                      aria-label="delete"
-                      color="error"
-                    >
-                      <Delete />
-                    </IconButton>
-                  </>
-                }
-              />
-              <CardContent>
-                <Typography variant="body1" my={2}>
-                  {statuses.find((s) => s.value === task.status)?.label}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {task.description}
-                </Typography>
-              </CardContent>
-            </Card>
+            <TaskCard task={task} fetchTasks={fetchTasks} />
           </Grid>
         ))}
       </Grid>

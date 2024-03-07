@@ -28,6 +28,8 @@ const RHSelect = ({
           options={options}
           renderInput={(params) => <TextField label={label} {...params} />}
           {...props.field}
+          value={props.field.value}
+          onChange={(_, data) => props.field.onChange(data)}
           {...rest}
         />
       )}

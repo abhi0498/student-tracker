@@ -55,3 +55,31 @@ export const fetchTasksByStudentId = async (id: string) => {
     return data;
   }
 };
+
+export const fetchPendingTasks = async () => {
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("*, student:student(name)")
+    .neq("status", "completed")
+    .order("due_date", { ascending: true });
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (data) {
+    return data;
+  }
+};
+
+export const fetchCompletedTasks = async () => {
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("*, student:student()")
+    .eq("status", "completed")
+    .order("due_date", { ascending: true });
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (data) {
+    return data;
+  }
+};

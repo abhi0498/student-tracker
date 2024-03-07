@@ -23,7 +23,7 @@ const BottomTabs = () => {
     {
       label: "Tasks",
       icon: <Assignment />,
-      path: "/reports",
+      path: "/tasks",
     },
     {
       label: "Reports",
@@ -37,11 +37,12 @@ const BottomTabs = () => {
     },
   ];
 
-  console.log(currentPath);
+  console.log({ currentPath });
   useEffect(() => {
     if (currentPath === "/") setValue(0);
-    if (currentPath === "/reports") setValue(1);
-    if (currentPath === "/profile") setValue(2);
+    if (currentPath === "/tasks") setValue(1);
+    if (currentPath === "/reports") setValue(2);
+    if (currentPath === "/profile") setValue(3);
   }, [currentPath]);
 
   if (currentPath === "/login") return null;

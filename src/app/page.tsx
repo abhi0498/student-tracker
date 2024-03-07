@@ -65,7 +65,7 @@ export default function Home() {
   }, [fetchData]);
 
   return (
-    <div style={{ margin: "2vw" }}>
+    <div style={{ margin: "1.5rem" }}>
       <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
         Students 🧑‍🎓
       </Typography>
@@ -90,7 +90,6 @@ export default function Home() {
           container
           spacing={3}
           pb={10}
-          px={1}
           sx={{ overflowY: "scroll", maxHeight: "80vh" }}
           alignItems={"center"}
         >

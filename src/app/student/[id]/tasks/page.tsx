@@ -4,7 +4,7 @@ import TasksList from "./TasksList";
 
 const Tasks = ({ params }: { params: { id: string } }) => {
   return (
-    <div style={{ margin: "4vw" }}>
+    <div style={{ margin: "1.5rem" }}>
       <TasksList id={params.id} />
     </div>
   );

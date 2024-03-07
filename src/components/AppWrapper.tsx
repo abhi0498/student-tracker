@@ -1,13 +1,12 @@
 //@ts-nocheck
 "use client";
 import { supabase } from "@/utils/supabase/client";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ConfirmProvider } from "material-ui-confirm";
-import Head from "next/head";
-import Script from "next/script";
 import React, { useEffect } from "react";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = React.useState(null);
   useEffect(() => {
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(function (OneSignal) {
@@ -25,6 +24,10 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
           OneSignal.login(session.user.id);
           OneSignal.User.addAlias("external_id", session.user.id);
         });
+      } else {
+        OneSignalDeferred.push(function () {
+          OneSignal.logout();
+        });
       }
     });
 
@@ -33,7 +36,11 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  return <ConfirmProvider>{children}</ConfirmProvider>;
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <ConfirmProvider>{children}</ConfirmProvider>
+    </LocalizationProvider>
+  );
 };
 
 export default AppWrapper;

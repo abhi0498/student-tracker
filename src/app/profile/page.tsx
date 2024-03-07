@@ -46,7 +46,7 @@ const Profile = () => {
     });
   };
   return (
-    <div style={{ margin: "2vw" }}>
+    <div style={{ margin: "1.5rem" }}>
       <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
         Profile
       </Typography>

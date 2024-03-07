@@ -52,7 +52,7 @@ const Upload = () => {
   console.log({ fieldColumnMapping });
 
   return (
-    <div style={{ margin: "2vw" }}>
+    <div style={{ margin: "1.5rem" }}>
       <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
         Upload Student Data 📂
       </Typography>
