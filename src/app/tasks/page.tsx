@@ -1,27 +1,38 @@
 "use client";
 
 import { fetchCompletedTasks, fetchPendingTasks } from "@/api/task";
-import { Fab, Grid, Skeleton, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Fab,
+  Grid,
+  Skeleton,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import TaskCard from "../student/[id]/tasks/TaskCard";
 import { Add } from "@mui/icons-material";
 import StudentDialog from "./StudentDialog";
+import { useDebounce } from "use-debounce";
 
 const Tasks = () => {
   const [tab, setTab] = useState("pending");
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [searchText] = useDebounce(search, 1000);
   const fetchTasks = async () => {
     setLoading(true);
     try {
       if (tab === "pending") {
-        const data = await fetchPendingTasks();
+        const data = await fetchPendingTasks(searchText);
         if (data) setTasks(data);
       }
       if (tab === "completed") {
-        const data = await fetchCompletedTasks();
+        const data = await fetchCompletedTasks(searchText);
         if (data) setTasks(data);
       }
     } catch (error: any) {
@@ -33,13 +44,23 @@ const Tasks = () => {
 
   useEffect(() => {
     fetchTasks();
-  }, [tab]);
+  }, [tab, searchText]);
 
   return (
     <div style={{ margin: "1.5rem" }}>
       <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
         Tasks 📋
       </Typography>
+
+      <TextField
+        onChange={(event) => setSearch(event.target.value)}
+        value={search}
+        placeholder="Search by Task Title or Student Name"
+        label="Search"
+        variant="outlined"
+        fullWidth
+        sx={{ mb: 1 }}
+      />
 
       <Tabs
         value={tab}
@@ -63,7 +84,7 @@ const Tasks = () => {
           spacing={2}
           my={2}
           style={{
-            maxHeight: "80vh",
+            maxHeight: "70vh",
             overflowY: "scroll",
             paddingBottom: "10vh",
           }}

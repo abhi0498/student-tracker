@@ -96,9 +96,9 @@ const TaskCard = ({ task, fetchTasks }: TaskCardProps) => {
       <CardContent>
         <Stack direction={"row"} spacing={1} justifyContent={"space-between"}>
           <Stack direction="column" flexGrow={1} spacing={1}>
-            {task.student && (
+            {task.student_name && (
               <Typography variant="body1" mb={2}>
-                For {task.student?.name}
+                For {task.student_name}
               </Typography>
             )}
             <Typography variant="body1">
@@ -109,7 +109,7 @@ const TaskCard = ({ task, fetchTasks }: TaskCardProps) => {
             </Typography>
           </Stack>
           <Stack direction="column" alignItems={"flex-end"} spacing={1}>
-            {task.student && (
+            {task.student_name && (
               <Stack
                 direction={"row"}
                 alignItems={"end"}
@@ -121,11 +121,11 @@ const TaskCard = ({ task, fetchTasks }: TaskCardProps) => {
                   style={{ paddingTop: 0 }}
                   aria-label="Mail"
                   onClick={() => {
-                    if (!task.student.email) {
+                    if (!task.student_email) {
                       return toast.error("No email found for this student");
                     }
                     const a = document.createElement("a");
-                    a.href = `mailto:${task.student.email}`;
+                    a.href = `mailto:${task.student_email}`;
                     a.click();
                   }}
                 >
@@ -137,7 +137,7 @@ const TaskCard = ({ task, fetchTasks }: TaskCardProps) => {
                   aria-label="Call"
                   onClick={() => {
                     const a = document.createElement("a");
-                    a.href = `tel:${task.student.phone}`;
+                    a.href = `tel:${task.student_phone}`;
                     a.click();
                   }}
                 >

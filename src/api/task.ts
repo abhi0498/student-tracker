@@ -56,12 +56,14 @@ export const fetchTasksByStudentId = async (id: string) => {
   }
 };
 
-export const fetchPendingTasks = async () => {
+export const fetchPendingTasks = async (searchText: string) => {
   const { data, error } = await supabase
-    .from("tasks")
-    .select("*, student:student(name)")
+    .from("tasks_student")
+    .select("*")
     .neq("status", "completed")
+    .or(`title.ilike.%${searchText}%,student_name.ilike.%${searchText}%`)
     .order("due_date", { ascending: true });
+
   if (error) {
     throw new Error(error.message);
   }
@@ -70,12 +72,14 @@ export const fetchPendingTasks = async () => {
   }
 };
 
-export const fetchCompletedTasks = async () => {
+export const fetchCompletedTasks = async (searchText: string) => {
   const { data, error } = await supabase
-    .from("tasks")
-    .select("*, student:student()")
+    .from("tasks_student")
+    .select("*")
     .eq("status", "completed")
+    .or(`title.ilike.%${searchText}%,student_name.ilike.%${searchText}%`)
     .order("due_date", { ascending: true });
+
   if (error) {
     throw new Error(error.message);
   }

@@ -4,67 +4,147 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export type Database = {
   public: {
     Tables: {
       student: {
         Row: {
-          age: string | null;
-          batch: string;
-          created_at: string;
-          created_by: string;
-          email: string | null;
-          id: number;
-          name: string;
-          phone: string | null;
-        };
+          age: string | null
+          batch: string | null
+          created_at: string
+          created_by: string
+          email: string | null
+          id: number
+          name: string
+          phone: string | null
+        }
         Insert: {
-          age?: string | null;
-          batch: string;
-          created_at?: string;
-          created_by?: string;
-          email?: string | null;
-          id?: number;
-          name: string;
-          phone?: string | null;
-        };
+          age?: string | null
+          batch?: string | null
+          created_at?: string
+          created_by?: string
+          email?: string | null
+          id?: number
+          name: string
+          phone?: string | null
+        }
         Update: {
-          age?: string | null;
-          batch?: string;
-          created_at?: string;
-          created_by?: string;
-          email?: string | null;
-          id?: number;
-          name?: string;
-          phone?: string | null;
-        };
+          age?: string | null
+          batch?: string | null
+          created_at?: string
+          created_by?: string
+          email?: string | null
+          id?: number
+          name?: string
+          phone?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "public_student_created_by_fkey";
-            columns: ["created_by"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "public_student_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
-        ];
-      };
-    };
+        ]
+      }
+      tasks: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string
+          id: number
+          status: string | null
+          student_id: number
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          due_date: string
+          id?: number
+          status?: string | null
+          student_id: number
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          due_date?: string
+          id?: number
+          status?: string | null
+          student_id?: number
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_tasks_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "student"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
+      tasks_student: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          due_date: string | null
+          id: number | null
+          status: string | null
+          student_age: string | null
+          student_batch: string | null
+          student_email: string | null
+          student_id: number | null
+          student_name: string | null
+          student_phone: string | null
+          title: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_tasks_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "student"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Enums: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
-};
+      [_ in never]: never
+    }
+  }
+}
 
 export type Tables<
   PublicTableNameOrOptions extends
@@ -77,7 +157,7 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
@@ -85,11 +165,11 @@ export type Tables<
       Database["public"]["Views"])
   ? (Database["public"]["Tables"] &
       Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
-  : never;
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -100,17 +180,17 @@ export type TablesInsert<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
-  : never;
+  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -121,17 +201,17 @@ export type TablesUpdate<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
-  : never;
+  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -144,4 +224,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
   ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never;
+  : never
