@@ -57,9 +57,15 @@ export const fetchTasksByStudentId = async (id: string) => {
 };
 
 export const fetchPendingTasks = async (searchText: string) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user?.id) throw new Error("User not found");
+
   const { data, error } = await supabase
     .from("tasks_student")
     .select("*")
+    .eq("created_by", user.id)
     .neq("status", "completed")
     .or(`title.ilike.%${searchText}%,student_name.ilike.%${searchText}%`)
     .order("due_date", { ascending: true });
@@ -73,9 +79,15 @@ export const fetchPendingTasks = async (searchText: string) => {
 };
 
 export const fetchCompletedTasks = async (searchText: string) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user?.id) throw new Error("User not found");
+
   const { data, error } = await supabase
     .from("tasks_student")
     .select("*")
+    .eq("created_by", user.id)
     .eq("status", "completed")
     .or(`title.ilike.%${searchText}%,student_name.ilike.%${searchText}%`)
     .order("due_date", { ascending: true });

@@ -5,10 +5,12 @@ import {
   Fab,
   Grid,
   Skeleton,
+  Stack,
   Tab,
   Tabs,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -24,6 +26,8 @@ const Tasks = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [searchText] = useDebounce(search, 1000);
+  const matches = useMediaQuery("(min-width:600px)");
+
   const fetchTasks = async () => {
     setLoading(true);
     try {
@@ -52,15 +56,22 @@ const Tasks = () => {
         Tasks 📋
       </Typography>
 
-      <TextField
-        onChange={(event) => setSearch(event.target.value)}
-        value={search}
-        placeholder="Search by Task Title or Student Name"
-        label="Search"
-        variant="outlined"
-        fullWidth
+      <Stack
+        justifyContent={"end"}
+        direction={"row"}
+        alignItems={"center"}
         sx={{ mb: 1 }}
-      />
+      >
+        <TextField
+          onChange={(event) => setSearch(event.target.value)}
+          value={search}
+          placeholder="Search by Task Title or Student Name"
+          label="Search"
+          variant="outlined"
+          fullWidth
+          sx={{ width: matches ? "30vw" : "100%", ml: "auto" }}
+        />
+      </Stack>
 
       <Tabs
         value={tab}
