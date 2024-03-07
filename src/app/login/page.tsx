@@ -109,6 +109,27 @@ export default function LoginPage() {
             >
               Sign up
             </Button>
+
+            <Button
+              sx={{ width: "100%" }}
+              variant="text"
+              color="primary"
+              onClick={() => {
+                supabase.auth
+                  .signInWithOAuth({
+                    provider: "google",
+                    options: {
+                      redirectTo: new URL("/", window.location.origin).href,
+                    },
+                  })
+                  .then((res) => {
+                    debugger;
+                    console.log(JSON.stringify(res, null, 2));
+                  });
+              }}
+            >
+              Sign in with Google
+            </Button>
           </Grid>
         </Grid>
       </Container>
