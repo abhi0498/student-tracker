@@ -1,7 +1,13 @@
 "use client";
 
 import { statuses } from "@/api/enums";
-import { deleteTask, updateTask } from "@/api/task";
+import {
+  deleteTask,
+  getAlertByTaskId,
+  getTaskById,
+  updateTask,
+} from "@/api/task";
+import { supabase } from "@/utils/supabase/client";
 import { AddAlertRounded, Delete, Mail, Phone } from "@mui/icons-material";
 import {
   Button,
@@ -15,7 +21,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { confirm } from "material-ui-confirm";
-import { MouseEvent, MouseEventHandler } from "react";
+import { MouseEvent, MouseEventHandler, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type TaskCardProps = {
@@ -24,6 +30,21 @@ type TaskCardProps = {
 };
 
 const TaskCard = ({ task, fetchTasks }: TaskCardProps) => {
+  const [alert, setAlert] = useState<any>(null);
+
+  const fetchAlert = async () => {
+    getAlertByTaskId(task.id)
+      .then((data) => {
+        setAlert(data);
+      })
+      .catch((error) => {
+        setAlert(null);
+      });
+  };
+  useEffect(() => {
+    fetchAlert();
+  }, [task.id]);
+
   const onDelete = (
     e: React.MouseEvent<HTMLButtonElement>,
     task: any
@@ -66,6 +87,7 @@ const TaskCard = ({ task, fetchTasks }: TaskCardProps) => {
         toast.error(error.message);
       });
   };
+
   return (
     <Card>
       <CardHeader
@@ -75,9 +97,37 @@ const TaskCard = ({ task, fetchTasks }: TaskCardProps) => {
             <IconButton
               size={"small"}
               aria-label="notify"
-              onClick={(e) => {
+              color={alert ? "primary" : "default"}
+              onClick={async (e) => {
                 e.stopPropagation();
-                toast.success("Notified");
+
+                if (alert) {
+                  return confirm({
+                    title: "Alert",
+                    description:
+                      "Alert already set for this task. Do you want to remove it?",
+                  }).then(() => {
+                    supabase
+                      .from("alerts")
+                      .delete()
+                      .eq("id", alert.id)
+                      .then(() => {
+                        fetchAlert();
+                        toast.success("Alert removed");
+                      });
+                  });
+                }
+
+                await supabase.from("alerts").insert({
+                  task_id: task.id,
+
+                  notify_on: dayjs(task.due_date)
+                    .subtract(1, "day")
+                    .toISOString(),
+                });
+                fetchAlert();
+
+                toast.success("Alert set for this task");
               }}
             >
               <AddAlertRounded />

@@ -7,17 +7,27 @@ import {
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
+  useMediaQuery,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const UploadButton = () => {
+  const matches = useMediaQuery("(min-width:600px)");
+  console.log(matches);
+
   const router = useRouter();
   const actions = [
     {
       icon: <UploadFile />,
       name: "Upload",
-      onClick: () => router.push("/upload"),
+      onClick: () => {
+        if (!matches) {
+          alert("Upload works best on desktop devices.");
+          return;
+        }
+        router.push("/upload");
+      },
     },
     { icon: <Add />, name: "Add", onClick: () => router.push("/student/new") },
   ];

@@ -27,7 +27,7 @@ const NoData = ({ height }: NoDataProps) => {
             backgroundColor: "white",
             borderRadius: "50%",
           }}
-          src="/no-data.svg"
+          src="/no-data-1.svg"
           alt="No data found"
           width={200}
           height={200}

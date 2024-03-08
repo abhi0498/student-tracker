@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      alerts: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: number
+          is_sent: boolean
+          notify_on: string
+          sent_on: string | null
+          task_id: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: number
+          is_sent?: boolean
+          notify_on: string
+          sent_on?: string | null
+          task_id?: number | null
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: number
+          is_sent?: boolean
+          notify_on?: string
+          sent_on?: string | null
+          task_id?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_alerts_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_alerts_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks_student"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       student: {
         Row: {
           age: string | null

@@ -14,6 +14,21 @@ export const getTaskById = async (id: string) => {
   }
 };
 
+export const getAlertByTaskId = async (id: string) => {
+  const { data, error } = await supabase
+    .from("alerts")
+    .select("*")
+    .eq("task_id", id)
+    .eq("is_sent", false)
+    .single();
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (data) {
+    return data;
+  }
+};
+
 export const createTask = async (task: any) => {
   const { data, error } = await supabase.from("tasks").insert(task);
   if (error) {
