@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred = [];
     OneSignalDeferred.push(function (OneSignal) {
       OneSignal.init({
         appId: "f567c986-15be-4591-93f8-1054dcd29fcd",
@@ -19,7 +19,8 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
       });
     });
     supabase.auth.onAuthStateChange((event, session) => {
-      alert("auth state change " + session?.user?.id);
+      window.OneSignalDeferred = [];
+      // alert("auth state change " + session?.user?.id);
       if (session?.user?.id) {
         OneSignalDeferred.push(function () {
           OneSignal.login(session.user.id);
