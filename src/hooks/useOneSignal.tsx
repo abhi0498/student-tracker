@@ -14,7 +14,7 @@ const useOneSignal = (id: string) => {
           console.log("Initializing OneSignal");
           onesignalInitializingRef.current = true;
           await OneSignal.init({
-            appId: "f567c986-15be-4591-93f8-1054dcd29fcd",
+            appId: "84e2e6fc-63e2-4144-bc74-35250ac51bb1",
             allowLocalhostAsSecureOrigin: true,
             notifyButton: {
               enable: true,
@@ -29,6 +29,7 @@ const useOneSignal = (id: string) => {
           }
 
           OneSignal.User.addAlias("external_id", id);
+          OneSignal.login(id);
         }
       } catch (e) {
         console.error("OneSignal Initilization", e);
