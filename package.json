@@ -33,6 +33,7 @@
     "react-hook-form": "^7.51.0",
     "react-hot-toast": "^2.4.1",
     "react-joyride": "^2.7.4",
+    "react-onesignal": "^3.0.1",
     "use-debounce": "^10.0.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz",
     "yup": "^1.3.3"
