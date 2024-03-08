@@ -22,6 +22,7 @@ const useOneSignal = (id: string) => {
             },
           });
           OneSignal.login(id);
+          OneSignal.User.removeAlias("external_id");
           OneSignal.User.addAlias("external_id", id);
         }
       } catch (e) {
