@@ -19,6 +19,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
       });
     });
     supabase.auth.onAuthStateChange((event, session) => {
+      alert("auth state change " + session?.user?.id);
       if (session?.user?.id) {
         OneSignalDeferred.push(function () {
           OneSignal.login(session.user.id);
